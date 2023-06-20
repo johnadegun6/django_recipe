@@ -1,6 +1,18 @@
 from django.db import models
+from django.conf import settings
 # from autoslug import AutoSlugField
-# Create your models here.
+"""
+-Global
+    -Ingredients
+    -Recipes
+
+-User
+    -Ingredients
+    -Recipes
+         -Ingredients
+         -Directions for Ingredients
+
+"""
 
 class Post(models.Model):
     title = models.CharField(max_length=255)
@@ -20,14 +32,19 @@ class Topic(models.Model):
     
 
 class Recipe(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
+    name = models.CharField(max_length=220)
     title = models.CharField(max_length=200)
     # slug = AutoSlugField(populate_from='title')
     image = models.CharField(max_length=400)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     ingredients = models.TextField()
-    directions = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+    directions = models.TextField(blank=True, null=True)
     servings = models.CharField(max_length=5)
-    timee = models.CharField(max_length=5)
+    time = models.CharField(max_length=5)
     calories = models.CharField(max_length=5)
     fat = models.CharField(max_length=5)
     carbs = models.CharField(max_length=5)
@@ -41,4 +58,25 @@ class Recipe(models.Model):
         return reverse("detail", kwargs={
             "slug": self.slug,
         })
-    
+
+
+class RecipeIngredients(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete= models.CASCADE)
+    name = models.CharField(max_length=220)
+    quantity = models.CharField(max_length=50) #1 1/4
+    unit =  models.CharField(max_length=50) #lbs, pounds oz, gram, etc
+    description = models.TextField(blank=True, null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+    directions = models.TextField(blank=True, null=True)
+   
+
+
+class GlobalIngredient(models.Model):
+    name =  models.CharField(max_length=220)
+    description =  models.TextField()
+
+
+# class RecipeImage():
+#     recipe = models.ForeignKey(Recipe)
