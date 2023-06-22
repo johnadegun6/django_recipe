@@ -31,33 +31,38 @@ class Topic(models.Model):
         return self.title
     
 
-class Recipe(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
-    name = models.CharField(max_length=220)
+class Recipe(models.Model): # declaration of class
+
+    # different fields
+
+    user= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
+    # name = models.CharField(max_length=220)
     title = models.CharField(max_length=200)
     # slug = AutoSlugField(populate_from='title')
     image = models.CharField(max_length=400)
     description = models.TextField(blank=True, null=True)
-    ingredients = models.TextField()
+    ingredients = models.CharField(max_length=1000)
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
-    directions = models.TextField(blank=True, null=True)
+    # directions = models.TextField(blank=True, null=True)
     servings = models.CharField(max_length=5)
-    time = models.CharField(max_length=5)
+    time = models.IntegerField()
     calories = models.CharField(max_length=5)
     fat = models.CharField(max_length=5)
     carbs = models.CharField(max_length=5)
     protein = models.CharField(max_length=5)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
 
+    # function to return name of record as title
+
     def __str__(self):
         return self.title
     
-    def get_url(self):
-        return reverse("detail", kwargs={
-            "slug": self.slug,
-        })
+    
+    def delete(self,*args, **kwargs):
+        self.image.delete()
+        super().delete(*args,**kwargs)
 
 
 class RecipeIngredients(models.Model):
@@ -70,7 +75,7 @@ class RecipeIngredients(models.Model):
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
     directions = models.TextField(blank=True, null=True)
-   
+    image = models.ImageField(upload_to=recipe)
 
 
 class GlobalIngredient(models.Model):

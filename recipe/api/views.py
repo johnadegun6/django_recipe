@@ -2,9 +2,11 @@ from django.shortcuts import render, get_object_or_404
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets
+from api.views import countries as country_views
 from .serializers import PostSerializer
-from .models import Post
+from .serializers import RecipeSerializer
+from .models import Post, recipe
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
 from rest_framework.generics import CreateAPIView, DestroyAPIView, RetrieveDestroyAPIView, UpdateAPIView
@@ -19,6 +21,19 @@ def posts(request):
     serializer = PostSerializer(post, many=True)
     data = serializer.data
     return Response(data, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+# @parser_classes([JSONParser,FormParser,MultiPartParser])
+def create_post(request):
+
+    serializer = Post_serializer(data = request.data,context = {"user":request.user})
+    if serializer.is_valid(raise_exception=True):
+        foodpost = serializer.save()
+        return Response(serializer.data)
+    
 
 # elif request.method == 'POST':
 #     data = JSONParser.parse(request)
@@ -110,3 +125,11 @@ def detail(request, slug):
         "recipe": recipe,
     }
     return render(request, "detail.html", context)
+
+def recipe(request):
+    return render(request, 'recipe.html')
+
+
+class RecipeView(viewsets.ModelViewSet):
+     queryset= recipe.objects.all() #spit out all the fields
+     serializer_class= RecipeSerializer

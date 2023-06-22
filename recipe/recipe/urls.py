@@ -16,9 +16,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+# from .import views
+from rest_framework import routers
+from rest_framework.routers import DefaultRouter
+from api.views import viewsets as country_views
+# from home.views import *
+# from recipe.views import *
+
+
+router = routers.DefaultRouter()
+router.register('recipe') #registering routers.
+router = DefaultRouter()
+router.register(r'recipe',views.CountryViewSet, basename='recipe')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('api.urls')),
+    path('',include(router.urls)),
     # path("",include('main.urls')),
+
 ]

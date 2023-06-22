@@ -1,3 +1,7 @@
+{% extends 'base.html'%}
+
+{% block start%}
+{% block title%}Recipe App{% endblock%}
 <!DOCTYPE html>
 <html>
     <head>
@@ -7,16 +11,23 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
+        <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body>
+    <body class= "container mt-5">
+    {% for recipe in recipes%}
+    <a href="{%url 'recipes' recipe.id%}">
     <h1>Recipe App</h1>
     
     <!-- Create a recipe -->
-    <form action="/recipes" method="post">
+    <form  class = "col-6 mx-auto card p-3 shadow-lg" action="/recipes" method="post">
+        {% csrf_token %}
         <h2>Create a Recipe</h2>
+        <div class = "mb-3">
         <input type="text" name="recipeName" placeholder="Recipe Name">
         <input type="submit" value="Create Recipe">
+        </div>
     </form>
+    <hr>
 
     <!-- Get all recipes -->
     <h2>All Recipes</h2>
@@ -24,14 +35,14 @@
 
     <!-- Get a particular recipe -->
     <h2>Get a Recipe</h2>
-    <form action="/recipes/{id}" method="get">
+    <form  class = "col-6 mx-auto card p-3 shadow-lg" action="/recipes/{id}" method="get">
         <input type="text" name="recipeId" placeholder="Recipe ID">
         <input type="submit" value="Get Recipe">
     </form>
 
     <!-- Update a recipe -->
     <h2>Update a Recipe</h2>
-    <form action="/recipes/{id}" method="put">
+    <form class = "col-6 mx-auto card p-3 shadow-lg" action="/recipes/{id}" method="put">
         <input type="text" name="recipeId" placeholder="Recipe ID">
         <input type="text" name="recipeName" placeholder="New Recipe Name">
         <input type="submit" value="Update Recipe">
@@ -39,21 +50,21 @@
 
     <!-- Remove a recipe -->
     <h2>Delete a Recipe</h2>
-    <form action="/recipes/{id}" method="delete">
+    <form class = "col-6 mx-auto card p-3 shadow-lg" action="/recipes/{id}" method="delete">
         <input type="text" name="recipeId" placeholder="Recipe ID">
         <input type="submit" value="Delete Recipe">
     </form>
 
     <!-- Get all ingredients for a recipe -->
     <h2>All Ingredients for a Recipe</h2>
-    <form action="/recipes/{id}/ingredients" method="get">
+    <form  class = "col-6 mx-auto card p-3 shadow-lg" action="/recipes/{id}/ingredients" method="get">
         <input type="text" name="recipeId" placeholder="Recipe ID">
         <input type="submit" value="Get Ingredients">
     </form>
 
     <!-- Get a particular ingredient of a recipe -->
     <h2>Get a Ingredient of a Recipe</h2>
-    <form action="/recipes/{recipeId}/ingredients/{ingredientId}" method="get">
+    <form class = "col-6 mx-auto card p-3 shadow-lg" action="/recipes/{recipeId}/ingredients/{ingredientId}" method="get">
         <input type="text" name="recipeId" placeholder="Recipe ID">
         <input type="text" name="ingredientId" placeholder="Ingredient ID">
         <input type="submit" value="Get Ingredient">
@@ -61,7 +72,7 @@
 
     <!-- Create an ingredient for a recipe -->
     <h2>Create an Ingredient for a Recipe</h2>
-    <form action="/recipes/{recipeId}/ingredients" method="post">
+    <form class = "col-6 mx-auto card p-3 shadow-lg" action="/recipes/{]recipeId}/ingredients" method="post">
         <input type="text" name="recipeId" placeholder="Recipe ID">
         <input type="text" name="ingredientName" placeholder="Ingredient Name">
         <input type="submit" value="Create Ingredient">
@@ -69,17 +80,22 @@
 
     <!-- Update an ingredient for a recipe -->
     <h2>Update an Ingredient for a Recipe</h2>
-    <form action="/recipes/{recipeId}/ingredients/{ingredientId}" method="put">
+    <form class = "col-6 mx-auto card p-3 shadow-lg" action="/recipes/{recipeId}/ingredients/{ingredientId}" method="put">
         <input type="text" name="recipeId" placeholder="Recipe ID">
         <input type="text" name="ingredientId" placeholder="Ingredient ID">
         <input type="text" name="ingredientName" placeholder="New Ingredient Name">
         <input type="submit" value="Update Ingredient">
     </form>
 
+
     <!-- Get all tags associated with a recipe -->
     <h2>All Tags Associated with a Recipe</h2>
-    <form action="/recipes/tags" method="get">
-        <input type="text" name="recipeId" placeholder=">
+    <form class = "col-6 mx-auto card p-3 shadow-lg" action="/recipes/tags" method="get">
+        <input type="text" name="recipeId" placeholder="">
         
         <script src="" async defer></script>
+    </body>
+    {%endfor%}
 </html>
+    {% include './category.html' with categories=categories%}
+{% endblock %}

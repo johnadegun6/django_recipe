@@ -1,0 +1,23 @@
+{% extends 'base.html'%}
+
+{% block start%}
+
+<!-- update_recipe.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Recipe</title>
+</head>
+<body class= "container mt-5">
+    <h1>Update Recipe</h1>
+    <form class= "col-6 mx-auto card p-3 shadow-lg" method="post" action="{% url 'update_recipe' recipe.id %}">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ recipe.name }}"><br>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description">{{ recipe.description }}</textarea><br>
+        <input type="submit" value="Update">
+    </form>
+</body>
+{% endblock%}
+</html>
